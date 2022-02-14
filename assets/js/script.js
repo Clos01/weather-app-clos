@@ -36,3 +36,18 @@ var getCurrentConditions = (event) => {
         let currentTimeZoneOffset = response.timezone;
         let currentTimeZoneOffsetHours = currentTimeZoneOffset / 60 / 60;
         let currentMoment = moment.unix(currentTimeUTC).utc().utcOffset(currentTimeZoneOffsetHours);
+        // Render cities list
+        renderCities();
+        // Obtain the 5day forecast for the searched city
+        getFiveDayForecast(event);
+        // Set the header text to the found city name
+        $('#header-text').text(response.name);
+        // HTML for the results of search
+        let currentWeatherHTML = `
+            <h3>${response.name} ${currentMoment.format("(MM/DD/YY)")}<img src="${currentWeatherIcon}"></h3>
+            <ul class="list-unstyled">
+                <li>Temperature: ${response.main.temp}&#8457;</li>
+                <li>Humidity: ${response.main.humidity}%</li>
+                <li>Wind Speed: ${response.wind.speed} mph</li>
+                <li id="uvIndex">UV Index:</li>
+            </ul>`;
