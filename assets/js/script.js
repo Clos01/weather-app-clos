@@ -51,3 +51,30 @@ var getCurrentConditions = (event) => {
                 <li>Wind Speed: ${response.wind.speed} mph</li>
                 <li id="uvIndex">UV Index:</li>
             </ul>`;
+            // Append the results to the DOM
+        $('#current-weather').html(currentWeatherHTML);
+        // Get the latitude and longitude for the UV search from Open Weather Maps API
+        let latitude = response.coord.lat;
+        let longitude = response.coord.lon;
+        let uvQueryURL = "api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&APPID=" + owmAPI;
+        // API solution for Cross-origin resource sharing (CORS) error: https://cors-anywhere.herokuapp.com/
+        uvQueryURL = "https://cors-anywhere.herokuapp.com/" + uvQueryURL;
+        // Fetch the UV information and build the color display for the UV index
+        fetch(uvQueryURL)
+        .then(handleErrors)
+        .then((response) => {
+            return response.json();
+        })
+        .then((response) => {
+            let uvIndex = response.value;
+            $('#uvIndex').html(`UV Index: <span id="uvVal"> ${uvIndex}</span>`);
+            if (uvIndex>=0 && uvIndex<3){
+                $('#uvVal').attr("class", "uv-favorable");
+            } else if (uvIndex>=3 && uvIndex<8){
+                $('#uvVal').attr("class", "uv-moderate");
+            } else if (uvIndex>=8){
+                $('#uvVal').attr("class", "uv-severe");
+            }
+        });
+    })
+}
