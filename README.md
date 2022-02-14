@@ -5,7 +5,8 @@ HTML
 * HTML
 * CSS
 * BootStrap
-* jQuery
+* javascript
+
 * Moment.js
 * API 
 
